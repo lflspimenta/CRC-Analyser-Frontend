@@ -7,6 +7,7 @@ import TabelaContratos from './TabelaContratos'
 import { Recomendacoes, Simulador } from './Recomendacoes'
 import AnaliseIA from './AnaliseIA'
 import SimuladorConsolidacao from './SimuladorConsolidacao'
+import ExportarPDF from './ExportarPDF'
 
 interface Props { resultado: AnaliseResult; onReset: () => void; pdfFile: File | null }
 
@@ -14,6 +15,7 @@ const TABS = ['Dashboard', 'Creditos', 'Solucoes', 'Analise IA', 'Consolidacao',
 
 export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
   const [tab, setTab] = useState(0)
+  const [analiseIATexto, setAnaliseIATexto] = useState('')
   const { metricas, alertas, contratos, recomendacoes } = resultado
 
   const scoreColor =
@@ -41,6 +43,7 @@ export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-stone-600 hidden sm:block">Ref. {resultado.referente_a}</span>
+          <ExportarPDF resultado={resultado} analiseIA={analiseIATexto} />
           <button onClick={onReset} className="text-xs px-3 py-1.5 rounded-lg border transition-colors text-stone-400 hover:text-stone-200"
             style={{ borderColor: 'var(--border)' }}>Novo CRC</button>
         </div>
@@ -59,7 +62,7 @@ export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
             )}
             {t === 'Analise IA' && (
               <span className="ml-1.5 text-xs px-1.5 py-0.5 rounded-full"
-                style={{ background: 'rgba(212,168,71,0.2)', color: 'var(--accent)' }}>Novo</span>
+                style={{ background: 'rgba(212,168,71,0.2)', color: 'var(--accent)' }}>IA</span>
             )}
           </button>
         ))}
@@ -119,8 +122,6 @@ export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
                 Total: <span className="text-stone-200 font-medium">{metricas.endividamento_total.toFixed(2)} E</span>
               </p>
             </div>
-
-            {/* botão rápido para análise IA */}
             <button onClick={() => setTab(3)}
               className="w-full py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
               style={{ background: 'rgba(212,168,71,0.1)', border: '1px solid rgba(212,168,71,0.3)', color: 'var(--accent)' }}>
@@ -128,13 +129,13 @@ export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
                 <path d="M8 2a6 6 0 1 1 0 12A6 6 0 0 1 8 2Z" stroke="currentColor" strokeWidth="1.2"/>
                 <path d="M8 5v3l2 2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
               </svg>
-              Ver análise detalhada por IA
+              Ver analise detalhada por IA
             </button>
           </div>
         )}
         {tab === 1 && <TabelaContratos contratos={contratos}/>}
         {tab === 2 && <Recomendacoes recomendacoes={recomendacoes}/>}
-        {tab === 3 && <AnaliseIA resultado={resultado} pdfFile={pdfFile}/>}
+        {tab === 3 && <AnaliseIA resultado={resultado} pdfFile={pdfFile} onTextoGerado={setAnaliseIATexto}/>}
         {tab === 4 && <SimuladorConsolidacao resultado={resultado} pdfFile={pdfFile}/>}
         {tab === 5 && <Simulador prestacaoActual={metricas.prestacao_mensal} rendimento={resultado.rendimento_mensal}/>}
       </main>
