@@ -263,7 +263,7 @@ export default function CalculadoraAprovacao({ resultado }: Props) {
           </p>
 
           {resultados.map((r: any) => {
-            const cfg = probConfig[r.probabilidade]
+            const cfg = probConfig[r.probabilidade as keyof typeof probConfig]
             return (
               <div key={r.banco} className="rounded-xl overflow-hidden"
                 style={{ border: `1px solid ${cfg.border}` }}>
