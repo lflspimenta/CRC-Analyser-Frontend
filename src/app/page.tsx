@@ -44,7 +44,8 @@ export default function Home() {
     }
   }
 
-  if (resultado) return <Dashboard resultado={resultado} onReset={() => setResultado(null)} />
+  // passa o ficheiro PDF para o Dashboard para uso nos novos endpoints
+  if (resultado) return <Dashboard resultado={resultado} onReset={() => { setResultado(null); setFile(null) }} pdfFile={file} />
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
