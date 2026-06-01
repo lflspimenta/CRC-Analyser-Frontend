@@ -6,12 +6,13 @@ import { ScoreRing, MetricCard, AlertaBadge } from './ScoreRing'
 import TabelaContratos from './TabelaContratos'
 import { Recomendacoes, Simulador } from './Recomendacoes'
 import AnaliseIA from './AnaliseIA'
+import CalculadoraAprovacao from './CalculadoraAprovacao'
 import SimuladorConsolidacao from './SimuladorConsolidacao'
 import ExportarPDF from './ExportarPDF'
 
 interface Props { resultado: AnaliseResult; onReset: () => void; pdfFile: File | null }
 
-const TABS = ['Dashboard', 'Creditos', 'Solucoes', 'Analise IA', 'Consolidacao', 'Simulador']
+const TABS = ['Dashboard', 'Creditos', 'Solucoes', 'Analise IA', 'Pre-aprovacao', 'Consolidacao', 'Simulador']
 
 export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
   const [tab, setTab] = useState(0)
@@ -136,8 +137,9 @@ export default function Dashboard({ resultado, onReset, pdfFile }: Props) {
         {tab === 1 && <TabelaContratos contratos={contratos}/>}
         {tab === 2 && <Recomendacoes recomendacoes={recomendacoes}/>}
         {tab === 3 && <AnaliseIA resultado={resultado} pdfFile={pdfFile} onTextoGerado={setAnaliseIATexto}/>}
-        {tab === 4 && <SimuladorConsolidacao resultado={resultado} pdfFile={pdfFile}/>}
-        {tab === 5 && <Simulador prestacaoActual={metricas.prestacao_mensal} rendimento={resultado.rendimento_mensal}/>}
+        {tab === 4 && <CalculadoraAprovacao resultado={resultado}/>}
+        {tab === 5 && <SimuladorConsolidacao resultado={resultado} pdfFile={pdfFile}/>}
+        {tab === 6 && <Simulador prestacaoActual={metricas.prestacao_mensal} rendimento={resultado.rendimento_mensal}/>}
       </main>
     </div>
   )
